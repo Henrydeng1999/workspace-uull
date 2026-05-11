@@ -133,6 +133,60 @@ Para 4 [本文工作]: Herein, we present ... / To address this issue, we design
 ```
 
 # 
+---
+
+## 消息发送工具
+
+### message（发消息/跨通道通信）
+
+当 main 协调者通过 sessions_send 给你下发任务，需要你往群里发消息时使用此工具。
+
+- **用途**：主动给某个群发消息
+- **⚠️ 必须参数（三个缺一不可）**：
+  - `action`: **必需！** 固定填 `"send"`
+  - `channel`: **必需！** 填 `"onebot"`
+  - `to`: 你的默认群 → `"onebot:group:1097473921"` （那个群）
+  - `message`: 要发送的内容
+- **完整格式**：`action: "send", channel: "onebot", to: "onebot:group:1097473921", message: "你的消息内容"`
+
+正确示例：
+```
+action: "send", channel: "onebot", to: "onebot:group:1097473921", message: "组里有人试过MOF限域单原子吗？"
+```
+
+❌ 常见错误（会导致 Validation failed）：
+- 缺 action：`channel: "onebot", to: "...", message: "..."` ← 必须加 action: "send"
+- 缺 channel：`action: "send", to: "...", message: "..."` ← 多通道时必须指定
+- 参数名错误：用 `text` 而不是 `message`
+
+### 群聊配置备忘
+
+| 群 | 群号 | 用途 |
+|----|------|------|
+| 那个群 | 1097473921 | **你的默认群**，收到"在你所在的群发消息"指令时用这个 |
+
+---
+
+## 网络搜索与抓取（curl / ddgs）
+
+### 方式1：curl 命令行
+
+```bash
+# DuckDuckGo 搜索
+curl --proxy http://192.168.1.2:28002 -s -A "Mozilla/5.0" "https://html.duckduckgo.com/html/?q=关键词"
+
+# Bing 搜索
+curl --proxy http://192.168.1.2:28002 -s "https://cn.bing.com/search?q=关键词"
+
+# 抓取任意网页
+curl --proxy http://192.168.1.2:28002 -sL "https://example.com" | head -100
+
+# 抓取维基百科
+curl --proxy http://192.168.1.2:28002 -sL "https://zh.wikipedia.org/wiki/关键词"
+```
+
+### 方式2：ddgs 工具
+- 直接调用 `ddgs` 工具进行DuckDuckGo搜索
 
 ---
 
